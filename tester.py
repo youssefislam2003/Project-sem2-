@@ -1,5 +1,7 @@
 import pytest
 from Main_class import FileHandler
+from Main_class import AdvancedFileHandler
+import os
 
 @pytest.fixture
 def temp_text_file(tmp_path):
@@ -25,6 +27,7 @@ def test_concat_files(tmp_path):
         content = result.read()
 
     assert content == "Hello\nWorld!\n"
+
 def test_static_and_class_methods(tmp_path):
     file = tmp_path / "testfile.txt"
     file.write_text("data")
@@ -34,3 +37,36 @@ def test_static_and_class_methods(tmp_path):
     handler = FileHandler.from_path(str(file))
     assert isinstance(handler, FileHandler)
     assert handler.file_path == str(file)
+
+
+def test_concat_multiple(tmp_path):
+    f1 = tmp_path / "a.txt"
+    f2 = tmp_path / "b.txt"
+    f3 = tmp_path / "c.txt"
+
+    f1.write_text("Apple\n")
+    f2.write_text("Banana\n")
+    f3.write_text("Cherry\n")
+
+    h1 = (str(f1))
+    h2 = (str(f2))
+    h3 = (str(f3))
+
+    result = h1.concat_multiple(h2, h3)
+
+    with open(result.file_path, 'r') as result_file:
+        content = result_file.read()
+
+    assert "Apple" in content and "Cherry" in content and "Banana" in content
+def test_read_lines_override(tmp_path):
+    file = tmp_path / "file.txt"
+    file.write_text("Test\nLine")
+    adv_handler = AdvancedFileHandler(str(file))
+
+    lines = list(adv_handler.read_lines())
+    assert lines == ["Test", "Line"]
+
+def test_file_not_found():
+    handler = FileHandler("non_existent_file.txt")
+    with pytest.raises(FileNotFoundError):
+        list(handler.read_lines())
