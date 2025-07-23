@@ -48,18 +48,17 @@ def test_concat_multiple(tmp_path):
     f2.write_text("Banana\n")
     f3.write_text("Cherry\n")
 
-handler = AdvancedFileHandler(str(f1))
-result = handler.concat_multiple(
+    handler = AdvancedFileHandler(str(f1))
+    result = handler.concat_multiple(
         AdvancedFileHandler(str(f2)),
         AdvancedFileHandler(str(f3))
     )
 
-result = h1.concat_multiple(h2, h3)
 
-with open(result.file_path, 'r') as result_file:
+    with open(result.file_path, 'r') as result_file:
         content = result_file.read()
 
-assert "Apple" in content and "Cherry" in content and "Banana" in content
+    assert "Apple" in content and "Cherry" in content and "Banana" in content
 def test_read_lines_override(tmp_path):
     file = tmp_path / "file.txt"
     file.write_text("Test\nLine")

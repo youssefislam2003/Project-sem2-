@@ -1,5 +1,3 @@
-This is the first file.
-Line A
-Line BThis is the second file.
-Line X
-Line Y
+Apple
+Banana
+Cherry
