@@ -1,3 +1,4 @@
+import os
 def deco(color: str):
     colors = {
         "red": "\033[91m",
@@ -9,10 +10,20 @@ def deco(color: str):
 
     def decorator(func):
         def wrapper(*args, **kwargs):
-            print(f"{colors.get(color, '')}Calling function: {func.__name__}{colors['end']}")
+            print(f"{colors.get(color, '')}[{args[0].__class__.__name__}] Calling: {func.__name__}{colors['end']}")
             return func(*args, **kwargs)
         return wrapper
     return decorator 
+def colored_text(text, color):
+    colors = {
+        "red": "\033[91m",
+        "green": "\033[92m",
+        "yellow": "\033[93m",
+        "blue": "\033[94m",
+        "end": "\033[0m"
+    }
+    return f"{colors.get(color, '')}{text}{colors['end']}"
+
 class FileHandler:
     def __init__(self, file_path: str):
         self._file_path = file_path
@@ -74,24 +85,37 @@ class AdvancedFileHandler(FileHandler):
 
 
 def main():
-    file1 = "example_files/file1.txt"
-    file2 = "example_files/file2.txt"
+        os.makedirs("example_files", exist_ok=True)
 
-    handler1 = AdvancedFileHandler(file1)
-    handler2 = AdvancedFileHandler(file2)
+        file1_path = "example_files/file1.txt"
+        file2_path = "example_files/file2.txt"
 
-    print("\n📄 Reading file1.txt:")
-    for line in handler1.read_lines():
-        print(" ", line)
+        if not os.path.exists(file1_path):
+         with open(file1_path, 'w') as f:
+            f.write("This is the first file.\nLine A\nLine B\n")
 
-    print("\n🔗 Concatenating both files into multi_output.txt...")
-    result_handler = handler1.concat_multiple(handler2)
+        if not os.path.exists(file2_path):
+         with open(file2_path, 'w') as f:
+            f.write("This is the second file.\nLine X\nLine Y\n")
+        
+        file1_path = "example_files/file1.txt"
+        file2_path = "example_files/file2.txt"
 
-    print(f"\n✅ Concatenated file created at: {result_handler.file_path}\n")
+        handler1 = AdvancedFileHandler(file1_path)
+        handler2 = AdvancedFileHandler(file2_path)
 
-    with open(result_handler.file_path, 'r') as f:
-        print("🧾 Combined Content:\n")
-        print(f.read())
+        print("\n📄 Reading file1.txt:")
+        for line in handler1.read_lines():
+         print(" ",colored_text(line, "green"))
+
+        print("\n🔗 Concatenating both files into multi_output.txt...")
+        result_handler = handler1.concat_multiple(handler2)
+
+        print(f"\n✅ Concatenated file created at: {result_handler.file_path}\n")
+
+        with open(result_handler.file_path, 'r') as f:
+         print("🧾 Combined Content:\n")
+         print(f.read())
 
 if __name__ == "__main__":
     main()
