@@ -54,14 +54,17 @@ class FileHandler:
     @classmethod
     def from_path(cls, path):
         return cls(path)
-class AdvancedFileHandler:
-     @deco("blue")
-     def read_lines(self):
+class AdvancedFileHandler(FileHandler):
+    def __init__(self, file_path: str):
+        super().__init__(file_path)
+
+    @deco("blue")
+    def read_lines(self):
         print("Reading lines using AdvancedFileHandler...")
         return super().read_lines()
 
-@deco("yellow")
-def concat_multiple(self, *handlers):
+    @deco("yellow")
+    def concat_multiple(self, *handlers):
         output_path = "multi_output.txt"
         with open(output_path, 'w') as outfile:
             for handler in (self, *handlers):
