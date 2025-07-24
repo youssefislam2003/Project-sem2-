@@ -40,7 +40,7 @@ class FileHandler:
 
     def __str__(self):
         return f"FileHandler({self._file_path})"
-    @deco("red")
+    @deco("green")
    
     def read_lines(self):
 
@@ -106,8 +106,8 @@ def main():
 
         print("\n📄 Reading file1.txt:")
         for line in handler1.read_lines():
-            pass
-         #print(" ",colored_text(line, "green"))
+            
+         print(" ",colored_text(line, "red"))
 
         print("\n🔗 Concatenating both files into multi_output.txt...")
         result_handler = handler1.concat_multiple(handler2)

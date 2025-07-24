@@ -13,6 +13,7 @@ def test_read_lines(temp_text_file):
     handler = FileHandler(temp_text_file)
     lines = list(handler.read_lines())
     assert lines == ["Line 1", "Line 2", "Line 3"]
+
 def test_concat_files(tmp_path):
     file1 = tmp_path / "file1.txt"
     file2 = tmp_path / "file2.txt"
